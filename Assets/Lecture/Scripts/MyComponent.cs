@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[AddComponentMenu("Effects/MyComponent Script")]
 public class MyComponent : MonoBehaviour
 {
     public int intVariable;
     public float floatVariable;
+    public GameObject[] gameObjects;
 
-	// Use this for initialization
-	void Start ()
+    [SerializeField]
+    private int _intVar;
+
+    // Use this for initialization
+    void Start ()
     {
 	
 	}
@@ -22,12 +27,12 @@ public class MyComponent : MonoBehaviour
     {
         get
         {
-            return intVariable;
+            return _intVar;
         }
 
         set
         {
-            intVariable = value;
+            _intVar = value;
         }
     }
 

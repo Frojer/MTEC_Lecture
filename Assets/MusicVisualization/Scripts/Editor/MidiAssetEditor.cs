@@ -24,17 +24,17 @@ public class MidiAssetEditor : Editor
         if (_foldout)
         {
             EditorGUI.indentLevel++;
-            GUILayout.Label(string.Format("PPQN : {0:d}", midiAsset.PPQN));
-            GUILayout.Label(string.Format("Pulse : {0:f}", midiAsset.pulseTime));
-            GUILayout.Label(string.Format("BPM : {0:d}", midiAsset.BPM));
-            GUILayout.Label(string.Format("Numerator : {0:d}", midiAsset.numerator));
+            EditorGUILayout.LabelField(string.Format("PPQN : {0:d}", midiAsset.PPQN));
+            EditorGUILayout.LabelField(string.Format("Pulse : {0:f}", midiAsset.pulseTime));
+            EditorGUILayout.LabelField(string.Format("BPM : {0:d}", midiAsset.BPM));
+            EditorGUILayout.LabelField(string.Format("Numerator : {0:d}", midiAsset.numerator));
             GUILayout.Label(string.Format("Denominater : {0:d}", midiAsset.denominator));
             EditorGUI.indentLevel--;
         }
 
         if (GUILayout.Button("Track Viewer") == true)
         {
-            MidiTrackWindow.ShowWindow();
+            MidiTrackWindow.ShowWindow(midiAsset);
         }
     }
 }

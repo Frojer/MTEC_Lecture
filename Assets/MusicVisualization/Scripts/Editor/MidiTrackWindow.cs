@@ -38,7 +38,7 @@ public class MidiTrackWindow : EditorWindow
         GUI.EndGroup();
 
         // Draw Musical Scale Area
-        rect = new Rect(0, titleHeight, musicalScaleWidth, position.height - titleHeight);
+        rect = new Rect(0, titleHeight + timeHeight, musicalScaleWidth, position.height - titleHeight);
         GUI.Box(rect, "");
         GUI.BeginGroup(rect);
         DrawMusicalScaleArea(rect.width, rect.height);
@@ -76,12 +76,16 @@ public class MidiTrackWindow : EditorWindow
 
     void DrawMusicalScaleArea(float width, float height)
     {
-        Rect rect = new Rect(0, 0, width, GridY);
+        int sNote = (int)(_noteAreaScroll.y / GridY);
+        int eNote = (int)((_noteAreaScroll.y + height) / GridY);
+        float sY = -(_noteAreaScroll.y % GridY);
+
+        Rect rect = new Rect(0, sY, width, GridY);
 
         GUIStyle style = new GUIStyle(GUI.skin.label);
         style.alignment = TextAnchor.MiddleCenter;
 
-        for (int i = 0; i < 128; i++)
+        for (int i = sNote; i < eNote; i++)
         {
             GUI.Box(rect, "");
             GUI.Label(rect, NoteNumberToString(i), style);
@@ -113,7 +117,72 @@ public class MidiTrackWindow : EditorWindow
 
     void DrawTimeArea(float width, float height)
     {
+        Rect areaRect = new Rect(0, 0, width, height);
 
+        int sTime = (int)(_noteAreaScroll.x / GridX);
+        int eTime = (int)((_noteAreaScroll.x + width) / GridX);
+
+        GUIStyle style = new GUIStyle(GUI.skin.label);
+        style.alignment = TextAnchor.MiddleLeft;
+
+        // Draw Text Area
+        int sText = (int)(sTime / 100);
+        int eText = (int)(eTime / 100);
+
+        float textW = GridX * 100;
+        float textH = height * 0.4f;
+        float textX = -(_noteAreaScroll.x % textW);
+
+        Rect textRect = new Rect(textX, 0, textW, textH);
+        for (int i = sText; i <= eText; i++)
+        {
+            GUI.Label(textRect, string.Format("{0:f1}", i * 0.1f), style);
+            textRect.x += textW;
+
+        }
+
+        // Draw Line Area
+        int sLine = (int)(sTime / 10);
+        int eLine = (int)(eTime / 10);
+        float lineW = GridX * 10;
+        float lineH = height - textH;
+        float sLineX = -(_noteAreaScroll.x % lineW);
+
+        Texture2D lineTexture = new Texture2D(1, 1);
+        lineTexture.SetPixel(0, 0, Color.black);
+        lineTexture.Apply();
+
+        Rect pixelRect = new Rect(0, 0, 1, 1);
+        int longLineY = (int)textH;
+        int shortLineY = (int)(longLineY + lineH * 0.5f);
+        int eLineY = (int)height;
+
+        for (int i = sTime; i <= eTime; i++)
+        {
+            pixelRect.x = sLineX;
+            if (i % 10 == 0) // Long Line
+            {
+                for (int j = longLineY; j <= eLineY; j++)
+                {
+                    pixelRect.y = j;
+                    GUI.DrawTexture(pixelRect, lineTexture);
+                }
+
+                GUI.DrawTexture(pixelRect, lineTexture);
+            }
+
+            else // Short Line
+            {
+                for (int j = shortLineY; j <= eLineY; j++)
+                {
+                    pixelRect.y = j;
+                    GUI.DrawTexture(pixelRect, lineTexture);
+                }
+
+                GUI.DrawTexture(pixelRect, lineTexture);
+            }
+            sLineX += lineW;
+        }
     }
 
     void DrawNoteArea(float width, float height)

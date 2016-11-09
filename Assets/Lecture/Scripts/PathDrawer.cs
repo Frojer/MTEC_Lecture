@@ -3,17 +3,15 @@ using System.Collections;
 
 public class PathDrawer : MonoBehaviour
 {
-    public GameObject[] Nodes;
+	public GameObject[] nodes;
 
 	// Use this for initialization
-	void Start ()
-    {
+	void Start () {
 	
 	}
 	
 	// Update is called once per frame
-	void Update ()
-    {
+	void Update () {
 	
 	}
 }

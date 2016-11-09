@@ -2,80 +2,78 @@
 using UnityEditor;
 using System.Collections;
 
+
 [CustomEditor(typeof(MidiPlayer))]
 public class MidiPlayerEditor : Editor
 {
-    SerializedProperty midi;
-    SerializedProperty music;
-    SerializedProperty audioSource;
-    SerializedProperty playDelayTime;
-    SerializedProperty playSpeed;
+	SerializedProperty midi;
+	SerializedProperty music;
+	SerializedProperty audioSource;
+	SerializedProperty playDelayTime;
+	SerializedProperty playSpeed;
 
-    void OnEnable()
-    {
-        midi = serializedObject.FindProperty("midi");
-        music = serializedObject.FindProperty("music");
-        audioSource = serializedObject.FindProperty("audioSource");
-        playDelayTime = serializedObject.FindProperty("playDelayTime");
-        playSpeed = serializedObject.FindProperty("playSpeed");
-    }
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
+	void OnEnable()
+	{
+		midi = serializedObject.FindProperty("midi");
+		music = serializedObject.FindProperty("music");
+		audioSource = serializedObject.FindProperty("audioSource");
+		playDelayTime = serializedObject.FindProperty("playDelayTime");
+		playSpeed = serializedObject.FindProperty("playSpeed");
+	}
 
-        EditorGUILayout.PropertyField(midi);
-        EditorGUILayout.PropertyField(music);
-        EditorGUILayout.PropertyField(audioSource);
-        EditorGUILayout.PropertyField(playDelayTime);
-        EditorGUILayout.PropertyField(playSpeed);
+	public override void OnInspectorGUI()
+	{
+		serializedObject.Update();
 
-        serializedObject.ApplyModifiedProperties();
+		EditorGUILayout.PropertyField(midi);
+		EditorGUILayout.PropertyField(music);
+		EditorGUILayout.PropertyField(audioSource);
+		EditorGUILayout.PropertyField(playDelayTime);
+		EditorGUILayout.PropertyField(playSpeed);
 
-        MidiPlayer midiPlayer = (MidiPlayer)target;
+		serializedObject.ApplyModifiedProperties();
 
-        if (Application.isPlaying)
-        {
-            GUILayout.BeginHorizontal();
+		MidiPlayer midiPlayer = (MidiPlayer)target;
 
-            if (midiPlayer.isPlaying)
-            {
-                if (GUILayout.Button("Pause"))
-                {
-                    midiPlayer.Pause();
-                }
+		if(Application.isPlaying == true)
+		{
+			GUILayout.BeginHorizontal();
+			if(midiPlayer.isPlaying == true)
+			{
+				if(GUILayout.Button("Pause") == true)
+				{
+					midiPlayer.Pause();
+				}
 
-                EditorUtility.SetDirty(target);
-            }
+				EditorUtility.SetDirty(target);
+			}
+			else
+			{
+				if(midiPlayer.playTime == 0)
+				{
+					if(GUILayout.Button("Play") == true)
+					{
+						midiPlayer.Play();
+					}
+				}
+				else
+				{
+					if(GUILayout.Button("Resume") == true)
+					{
+						midiPlayer.Resume();
+					}
+				}
+			}
 
-            else
-            {
-                if (midiPlayer.playTime == 0.0f)
-                {
-                    if (GUILayout.Button("Play"))
-                    {
-                        midiPlayer.Play();
-                    }
-                }
+			if(GUILayout.Button("Stop") == true)
+			{
+				midiPlayer.Stop();
+			}
+			GUILayout.EndHorizontal();
 
-                else
-                {
-                    if (GUILayout.Button("Resume"))
-                    {
-                        midiPlayer.Resume();
-                    }
-                }
-            }
-
-            if (GUILayout.Button("Stop"))
-            {
-                midiPlayer.Stop();
-            }
-
-            GUILayout.EndHorizontal();
-
-            GUILayout.HorizontalSlider(midiPlayer.playTime, 0.0f, midiPlayer.totalTime);
-            EditorGUILayout.LabelField(string.Format("Time: {0:f1}sec", midiPlayer.playTime));
-        }
-    }
+			GUILayout.HorizontalSlider(midiPlayer.playTime, 0f, midiPlayer.totalTime);
+			EditorGUILayout.LabelField(string.Format("Time: {0:F1}sec", midiPlayer.playTime));
+		}
+	}
 }

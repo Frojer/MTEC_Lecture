@@ -354,7 +354,7 @@ public class MidiFileReader
         /* Read the entire file into memory */
         data = new byte[info.Length];
         int offset = 0;
-        //      int len = (int)info.Length;
+  //      int len = (int)info.Length;
         while (true)
         {
             if (offset == info.Length)
@@ -844,26 +844,26 @@ public class MidiFile
  * - All the tracks in the song which contain notes. 
  * - The number, starttime, and duration of each note.
  */
-    public MidiFile(string filename)
-    {
-        this.filename = filename;
-        Load(new MidiFileReader(filename));
+	public MidiFile(string filename)
+	{
+		this.filename = filename;
+		Load(new MidiFileReader(filename));
 
-    }
+	}
 
-    public MidiFile(byte[] data)
-    {
-        Load(new MidiFileReader(data));
-    }
+	public MidiFile(byte[] data)
+	{
+		Load(new MidiFileReader(data));
+	}
 
-    public void Load(MidiFileReader file)
+	public void Load(MidiFileReader file)
     {
         string id;
         int len;
-
+        
         tracks = new List<MidiTrack>();
         trackPerChannel = false;
-
+		        
         id = file.ReadAscii(4);
         if (id != "MThd")
         {
@@ -967,12 +967,12 @@ public class MidiFile
             // If the midi file is truncated here, we can still recover.
             // Just return what we've parsed so far.
 
-            //            int startoffset = 0;
+//            int startoffset = 0;
             int deltatime = 0;
             byte peekevent;
             try
             {
-                //            startoffset = file.GetOffset();
+    //            startoffset = file.GetOffset();
                 deltatime = file.ReadVarlen();
                 starttime += deltatime;
                 peekevent = file.Peek();
@@ -1954,14 +1954,14 @@ public class MidiFile
      */
     private static void CheckStartTimes(List<MidiTrack> tracks)
     {
-        //        foreach (MidiTrack track in tracks)
-        //        {
-        //            int prevtime = -1;
-        //            foreach (MidiNote note in track.Notes)
-        //            {                
-        //                prevtime = note.StartTime;
-        //            }
-        //        }
+//        foreach (MidiTrack track in tracks)
+//        {
+//            int prevtime = -1;
+//            foreach (MidiNote note in track.Notes)
+//            {                
+//                prevtime = note.StartTime;
+//            }
+//        }
     }
 
     /** In Midi Files, time is measured in pulses.  Notes that have
@@ -2190,65 +2190,65 @@ public class MidiFile
     }
 
     public static string NoteToString(int note)
-    {
-        string text = "";
-        switch ((int)(note % 12f))
-        {
-            case 0:
-                text = "C";
-                break;
+	{
+		string text = "";
+		switch ((int)(note % 12f))
+		{
+			case 0:
+				text = "C";
+				break;
+			
+			case 1:
+				text = "C#";
+				break;
+			
+			case 2:
+				text = "D";
+				break;
+			
+			case 3:
+				text = "D#";
+				break;
+			
+			case 4:
+				text = "E";
+				break;
+			
+			case 5:
+				text = "F";
+				break;
+			
+			case 6:
+				text = "F#";
+				break;
+			
+			case 7:
+				text = "G";
+				break;
+			
+			case 8:
+				text = "G#";
+				break;
+			
+			case 9:
+				text = "A";
+				break;
+			
+			case 10:
+				text = "A#";
+				break;
+			
+			case 11:
+				text = "B";
+				break;
+			
+			case 12:
+				text = "B#";
+				break;
+		}
 
-            case 1:
-                text = "C#";
-                break;
-
-            case 2:
-                text = "D";
-                break;
-
-            case 3:
-                text = "D#";
-                break;
-
-            case 4:
-                text = "E";
-                break;
-
-            case 5:
-                text = "F";
-                break;
-
-            case 6:
-                text = "F#";
-                break;
-
-            case 7:
-                text = "G";
-                break;
-
-            case 8:
-                text = "G#";
-                break;
-
-            case 9:
-                text = "A";
-                break;
-
-            case 10:
-                text = "A#";
-                break;
-
-            case 11:
-                text = "B";
-                break;
-
-            case 12:
-                text = "B#";
-                break;
-        }
-
-        return string.Format("{0}{1:d}", text, (int)(note / 12f));
-    }
+		return string.Format("{0}{1:d}", text, (int)(note / 12f));
+	}
 }
 
 [Serializable]

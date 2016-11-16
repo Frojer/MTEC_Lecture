@@ -9,13 +9,24 @@ public class MidiEventTriggerEditor : Editor
     private bool foldout = false;
     private bool foldout2 = false;
 
+    SerializedProperty eventNoteOn;
+    SerializedProperty eventNoteOff;
+
     void OnEnable()
     {
-
+        eventNoteOn = serializedObject.FindProperty("eventNoteOn");
+        eventNoteOff = serializedObject.FindProperty("eventNoteOff");
     }
 
     public override void OnInspectorGUI()
     {
+        serializedObject.Update();
+
+        EditorGUILayout.PropertyField(eventNoteOn, new GUIContent("Note On"));
+        EditorGUILayout.PropertyField(eventNoteOff, new GUIContent("Note Off"));
+
+        serializedObject.ApplyModifiedProperties();
+
         MidiEventTrigger trigger = (MidiEventTrigger)target;
 
         foldout = EditorGUILayout.Foldout(foldout, "Instrument Filter");
@@ -47,7 +58,7 @@ public class MidiEventTriggerEditor : Editor
         }
 
 
-        foldout2 = EditorGUILayout.Foldout(foldout2, "Instrument Filter");
+        foldout2 = EditorGUILayout.Foldout(foldout2, "Note Filter");
 
         if (foldout2)
         {

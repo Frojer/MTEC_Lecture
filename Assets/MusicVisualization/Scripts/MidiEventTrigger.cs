@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public class MidiEventTrigger : MonoBehaviour
 {
     public bool[] instrumentFilter = new bool[129];
     public bool[] noteFilter = new bool[128];
+
+    public UnityEvent eventNoteOn;
+    public UnityEvent eventNoteOff;
 
     private bool _noteOn = false;
 
@@ -36,16 +40,22 @@ public class MidiEventTrigger : MonoBehaviour
             _noteOn = true;
 
             if (instrumentFilter[instrument] && noteFilter[noteNumber])
+            {
+                eventNoteOn.Invoke();
                 OnNoteOn();
+            }
         }
     }
 
-	public void NoteOff(int instrument, int noteNumber)
-	{
+    public void NoteOff(int instrument, int noteNumber)
+    {
         _noteOn = false;
 
         if (instrumentFilter[instrument] && noteFilter[noteNumber])
+        {
+            eventNoteOff.Invoke();
             OnNoteOff();
+        }
     }
 
     protected virtual void OnPlay()
